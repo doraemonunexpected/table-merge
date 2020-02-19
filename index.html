@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table width="400" border="1" id="table1">
+    </table>
+    <br>
+    <input type="button" value="合并表格" onclick="combineTable(table1)">
+</body>
+
+<script>
+    const data = [
+        ['a', 'for', '100', '200', '1'],
+        ['a', 'for', '100', '300', '1'],
+        ['a', 'if', '100', '200', '3'],
+        ['a', 'if', '300', '230', '4'],
+        ['a', 'if', '320', '230', '5'],
+        ['a', 'else', '100', '100', '100']
+    ]
+
+    const table = document.getElementById('table1');
+    for (let r = 0; r < data.length; ++r) {
+        const tr = document.createElement('tr');
+        let innerHtml = '';
+        for (let c = 0; c < data[0].length; ++c) {
+            innerHtml += `<td id="tb__${r}_${c}">${data[r][c]}</td>`;
+        }
+        tr.innerHTML = innerHtml;
+        table.appendChild(tr);
+    }
+
+    function combineTable(tb, colLength) {
+        const rowCount = tb.rows.length;
+        const colCount = tb.rows[0].cells.length;
+        colLength = !!colLength ? colLength : colCount;
+        for (let c = 0; c < colLength; ++c) {
+            let cmp = document.getElementById(`tb__0_${c}`);
+            for (let r = 1; r < rowCount; ++r) {
+                const next = document.getElementById(`tb__${r}_${c}`);
+                if (cmp.innerText == next.innerText) {
+                    ++cmp.rowSpan;
+                    next.parentNode.removeChild(next);
+                } else {
+                    cmp = next;
+                }
+            }
+        }
+    }
+</script>
+
+</html>
